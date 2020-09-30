@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
+import 'firebase/analytics'
 
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData} from 'react-firebase-hooks/firestore'
@@ -21,12 +22,14 @@ firebase.initializeApp({
 
 const auth = firebase.auth()
 const firestore = firebase.firestore()
+const analytics = firebase.analytics()
 function App() {
   const [user] = useAuthState(auth)
   return (
     <div className="App">
       <header>
-        
+        <h1>Mike's Chat App</h1>
+        <SignOut />
       </header>
       <section>
         {user ? <ChatRoom /> : <SignIn />}
@@ -60,7 +63,7 @@ function ChatRoom() {
   const sendMessage = async(e) => {
     e.preventDefault()
 
-    const {uid, photUrl} = auth.currentUser
+    const {uid, photoUrl} = auth.currentUser
     await messagesRef.add({
       test: formValue,
       created: firebase.firestore.FieldValue.serverTimestamp(),
@@ -86,12 +89,12 @@ function ChatRoom() {
 }
 
 function ChatMessage(props) {
-  const {text, uid } = props.message;
+  const {text, uid, photoURL } = props.message;
   const messageClass = uid === auth.currentUser.id ? 'sent' : 'received'
 
   return (
       <div className={`message ${messageClass}`}>
-        <img src={photoURL}/>
+        <img src={photoURL ||  'https://api.adorable.io/avatars/23/abott@adorable.png'}/>
         <p>{text}</p>
       </div>
   )
