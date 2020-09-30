@@ -1,5 +1,4 @@
 import React, {useState, useRef} from 'react';
-import logo from './logo.svg';
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
@@ -63,7 +62,7 @@ function ChatRoom() {
   const sendMessage = async(e) => {
     e.preventDefault()
 
-    const {uid, photoUrl} = auth.currentUser
+    const {uid, photoURL} = auth.currentUser
     await messagesRef.add({
       test: formValue,
       created: firebase.firestore.FieldValue.serverTimestamp(),
